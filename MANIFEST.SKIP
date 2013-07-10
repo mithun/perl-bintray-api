@@ -1,0 +1,13 @@
+\.bak$
+\.DS_Store$
+\.mkdn$
+\.tmp$
+^blib
+^Build$
+^MANIFEST\.SKIP$
+^MYMETA.yml$
+^MYMETA\.json$
+^\.author
+^\.git
+^_build
+~$
