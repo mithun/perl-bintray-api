@@ -98,6 +98,10 @@ sub talk {
                 type    => SCALAR,
                 default => '',
             },
+            wantheaders => {
+                type    => BOOLEAN,
+                default => 0,
+            },
         },
     );
 
@@ -123,9 +127,24 @@ sub talk {
   return unless $response->{success};
   return unless $response->{content};
 
-    # Return Response
-  return $self->json->decode(
+    # Collect Response
+    my $api_response = $self->json->decode(
         Encode::decode( 'utf-8-strict', $response->{content} ) );
+
+    # Collect Headers
+    my $api_headers = {};
+    foreach my $_h ( grep { /^x\-/xi } keys %{ $response->{headers} } ) {
+        $api_headers->{$_h} = $response->{headers}->{$_h};
+    }
+
+    # Return
+    if ( $opts{wantheaders} ) {
+      return {
+            headers => $api_headers,
+            data    => $api_response,
+        };
+    } ## end if ( $opts{wantheaders...})
+  return $api_response;
 } ## end sub talk
 
 #######################
