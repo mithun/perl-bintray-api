@@ -13,13 +13,36 @@ use Carp qw(croak carp);
 our $VERSION = '0.01';
 
 #######################
-# EXPORT
+# LOAD CPAN MODULES
 #######################
-use base qw(Exporter);
-our (%EXPORT_TAGS);
+use Object::Tiny qw(session);
 
-%EXPORT_TAGS = ( all => [qw()] );
-Exporter::export_ok_tags(qw(all));
+#######################
+# LOAD DIST MODULES
+#######################
+use Bintray::API::Session;
+
+#######################
+# PUBLIC METHODS
+#######################
+
+## ====================
+## CONSTRUCTOR
+## ====================
+sub new {
+    my ( $class, @args ) = @_;
+    my $self = {};
+    bless $self, $class;
+
+    # Init Session
+    $self->{session} = Bintray::API::Session->new(@args);
+  return $self;
+} ## end sub new
+
+## ====================
+## Bintray OBJECTS
+## ====================
+# sub search { return Bintray::API::Search->new( session => shift->session, @_ ); }
 
 #######################
 1;
