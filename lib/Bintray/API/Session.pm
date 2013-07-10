@@ -14,15 +14,16 @@ use JSON::Any;
 use Encode qw();
 use HTTP::Tiny qw();
 use URI::Encode qw();
-use Params::Validate qw(validate_with :types);
 use MIME::Base64 qw(encode_base64);
+use Params::Validate qw(validate_with :types);
 use Object::Tiny qw(
-  username
   apikey
-  debug
+  apiurl
   client
-  urlencoder
+  debug
   json
+  urlencoder
+  username
 );
 
 #######################
@@ -48,6 +49,9 @@ sub new {
         },
     );
 
+    # Set API URL
+    $opts{apiurl} = 'https://bintray.com/api/v1';
+
     # Init HTTP Client
     $opts{client} = HTTP::Tiny->new(
         agent           => 'perl-bintray-api-client',
@@ -72,6 +76,57 @@ sub new {
     my $self = $class->SUPER::new(%opts);
   return $self;
 } ## end sub new
+
+## Talk
+sub talk {
+    my ( $self, @args ) = @_;
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            method => {
+                type    => SCALAR,
+                default => 'GET',
+            },
+            path => {
+                type => SCALAR,
+            },
+            query => {
+                type    => ARRAYREF,
+                default => [],
+            },
+            content => {
+                type    => SCALAR,
+                default => '',
+            },
+        },
+    );
+
+    # Build URL
+    $opts{path} =~ s{^\/}{}x;
+    my $url = join( '/', $self->apiurl(), $opts{path} );
+    my @query_parts;
+    foreach my $_q ( @{ $opts{query} } ) {
+        push @query_parts, sprintf( '%s=%s', each %{$_q} );
+    }
+    if (@query_parts) {
+        $url .= '?' . join( '&', @query_parts );
+    }
+    $url = $self->urlencoder->encode($url);
+
+    # Talk
+    my $response
+      = $self->client()
+      ->request( $opts{method}, $url,
+        { $opts{content} ? ( content => $opts{content} ) : () } );
+
+    # Check Response
+  return unless $response->{success};
+  return unless $response->{content};
+
+    # Return Response
+  return $self->json->decode(
+        Encode::decode( 'utf-8-strict', $response->{content} ) );
+} ## end sub talk
 
 #######################
 1;
