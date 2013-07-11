@@ -94,6 +94,10 @@ sub talk {
                 type    => ARRAYREF,
                 default => [],
             },
+            params => {
+                type    => ARRAYREF,
+                default => [],
+            },
             content => {
                 type    => SCALAR,
                 default => '',
@@ -108,6 +112,7 @@ sub talk {
     # Build URL
     $opts{path} =~ s{^\/}{}x;
     my $url = join( '/', $self->apiurl(), $opts{path} );
+
     my @query_parts;
     foreach my $_q ( @{ $opts{query} } ) {
         push @query_parts, sprintf( '%s=%s', each %{$_q} );
@@ -115,6 +120,16 @@ sub talk {
     if (@query_parts) {
         $url .= '?' . join( '&', @query_parts );
     }
+
+    my @param_parts;
+    foreach my $_p ( @{ $opts{params} } ) {
+        push @param_parts, sprintf( '%s=%s', each %{$_p} );
+    }
+    if (@param_parts) {
+        $url .= ';' . join( ';', @param_parts );
+    }
+
+    # Encode
     $url = $self->urlencoder->encode($url);
 
     # Talk
@@ -146,6 +161,70 @@ sub talk {
     } ## end if ( $opts{wantheaders...})
   return $api_response;
 } ## end sub talk
+
+## Paginate
+sub paginate {
+    my ( $self, @args ) = @_;
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            query => {
+                type    => ARRAYREF,
+                default => [],
+            },
+            max => {
+                type    => SCALAR,
+                default => 200,
+                regex   => qr/^\d+$/,
+            },
+        },
+        allow_extra => 1,
+    );
+
+    my $max_results    = delete $opts{max};
+    my $num_of_results = 0;
+    my $start_pos      = 0;
+    my $data           = [];
+    while (1) {
+
+        # Talk
+        my $response = $self->talk(
+            %opts,
+            wantheaders => 1,
+            query       => [ { start_pos => $start_pos }, @{ $opts{query} }, ],
+        );
+      last if not defined $response;
+
+        # Check data
+        if ( ref( $response->{data} ) eq 'ARRAY' ) {
+            push @$data, @{ $response->{data} };
+            $num_of_results += scalar( @{ $response->{data} } );
+        } ## end if ( ref( $response->{...}))
+        else {
+            $data = $response->{data};
+          last;
+        } ## end else [ if ( ref( $response->{...}))]
+
+        # Get position
+        my $_total = $response->{headers}->{'x-rangelimit-total'}    || 0;
+        my $_start = $response->{headers}->{'x-rangelimit-startpos'} || 0;
+        my $_end   = $response->{headers}->{'x-rangelimit-endpos'}   || 0;
+        my $_per_page = $_end - $_start;
+
+        # Update Current
+        $start_pos = $_end + 1;
+
+        # Continue paging?
+      last if ( $num_of_results >= $max_results );
+      last if ( $num_of_results >= $_total );
+    } ## end while (1)
+
+    # Return
+    if ( $opts{wantheaders} ) {
+      return { data => $data };
+    }
+  return $data;
+} ## end sub paginate
 
 #######################
 1;

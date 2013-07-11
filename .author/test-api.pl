@@ -18,16 +18,7 @@ my $bt = Bintray::API->new(
 );
 
 my $s = $bt->session;
-p $s->talk(
-    path    => '/packages/mithun/test-repo/test-pkg/attributes',
-    method  => 'POST',
-    content => $s->json->encode(
-        [
-            {
-                name   => 'test-attr',
-                values => ['foo'],
-            },
-        ]
-    ),
+p $s->paginate(
+    path  => '/search/users',
+    query => [ { name => 'bob' }, ],
 );
-
