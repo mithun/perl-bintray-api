@@ -272,16 +272,3 @@ sub paginate {
 1;
 
 __END__
-
-#######################
-# POD SECTION
-#######################
-=pod
-
-=head1 NAME
-
-=head1 DESCRIPTION
-
-=head1 SYNOPSIS
-
-=cut
