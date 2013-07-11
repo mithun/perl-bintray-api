@@ -21,6 +21,7 @@ use Object::Tiny qw(
   apiurl
   client
   debug
+  hascreds
   json
   urlencoder
   username
@@ -37,10 +38,12 @@ sub new {
         params => [@args],
         spec   => {
             username => {
-                type => SCALAR,
+                type    => SCALAR,
+                default => '',
             },
             apikey => {
-                type => SCALAR,
+                type    => SCALAR,
+                default => '',
             },
             debug => {
                 type    => BOOLEAN,
@@ -52,14 +55,27 @@ sub new {
     # Set API URL
     $opts{apiurl} = 'https://bintray.com/api/v1';
 
+    # Check for credentials
+    if ( $opts{username} and $opts{apikey} ) {
+        $opts{hascreds} = 1;
+    }
+
     # Init HTTP Client
     $opts{client} = HTTP::Tiny->new(
         agent           => 'perl-bintray-api-client',
         default_headers => {
-            'Accept'        => 'application/json',
-            'Content-Type'  => 'application/json',
-            'Authorization' => sprintf( '%s %s',
-                'Basic', encode_base64( join( ':', $opts{username}, $opts{apikey} ), '' ),
+            'Accept'       => 'application/json',
+            'Content-Type' => 'application/json',
+
+            # Save Credentials for Basic Auth
+            (
+                $opts{hascreds}
+                ? (
+                    'Authorization' => sprintf( '%s %s',
+                        'Basic', encode_base64( join( ':', $opts{username}, $opts{apikey} ), '' ),
+                    ),
+                  )
+                : ()
             ),
         },
     );
@@ -106,8 +122,19 @@ sub talk {
                 type    => BOOLEAN,
                 default => 0,
             },
+            anon => {
+                type    => BOOLEAN,
+                default => 0,
+            },
         },
     );
+
+    # Check for Credentials
+    if ( not $opts{anon} ) {
+        croak "ERROR: API Method $opts{path} requires authentication."
+          . " Please set a username and apikey to use this."
+          unless $self->hascreds();
+    } ## end if ( not $opts{anon} )
 
     # Build URL
     $opts{path} =~ s{^\/}{}x;
