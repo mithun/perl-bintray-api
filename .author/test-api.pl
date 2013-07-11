@@ -13,12 +13,13 @@ use Bintray::API;
 use Data::Printer;
 
 my $bt = Bintray::API->new(
-    username => 'mithun',
-    apikey   => $ENV{PERL_BINTRAY_API},
+
+    # username => 'mithun',
+    # apikey   => $ENV{PERL_BINTRAY_API},
 );
 
 my $s = $bt->session;
-p $s->paginate(
-    path  => '/search/users',
-    query => [ { name => 'bob' }, ],
+p $s->talk(
+    path => '/repos/mithun',
+    anon => 1,
 );

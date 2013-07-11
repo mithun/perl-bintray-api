@@ -16,6 +16,7 @@ use HTTP::Tiny qw();
 use URI::Encode qw();
 use MIME::Base64 qw(encode_base64);
 use Params::Validate qw(validate_with :types);
+
 use Object::Tiny qw(
   apikey
   apiurl
@@ -23,6 +24,7 @@ use Object::Tiny qw(
   debug
   hascreds
   json
+  limits
   urlencoder
   username
 );
@@ -136,10 +138,11 @@ sub talk {
           unless $self->hascreds();
     } ## end if ( not $opts{anon} )
 
-    # Build URL
+    # Build Path
     $opts{path} =~ s{^\/}{}x;
     my $url = join( '/', $self->apiurl(), $opts{path} );
 
+    # Build Query
     my @query_parts;
     foreach my $_q ( @{ $opts{query} } ) {
         push @query_parts, sprintf( '%s=%s', each %{$_q} );
@@ -148,6 +151,7 @@ sub talk {
         $url .= '?' . join( '&', @query_parts );
     }
 
+    # Build Params
     my @param_parts;
     foreach my $_p ( @{ $opts{params} } ) {
         push @param_parts, sprintf( '%s=%s', each %{$_p} );
@@ -167,11 +171,13 @@ sub talk {
 
     # Check Response
   return unless $response->{success};
-  return unless $response->{content};
 
     # Collect Response
-    my $api_response = $self->json->decode(
-        Encode::decode( 'utf-8-strict', $response->{content} ) );
+    my $api_response_data;
+    if ( $response->{content} ) {
+        $api_response_data = $self->json->decode(
+            Encode::decode( 'utf-8-strict', $response->{content} ) );
+    } ## end if ( $response->{content...})
 
     # Collect Headers
     my $api_headers = {};
@@ -179,14 +185,24 @@ sub talk {
         $api_headers->{$_h} = $response->{headers}->{$_h};
     }
 
+    # Save Limits
+    if (    exists $api_headers->{'x-ratelimit-limit'}
+        and exists $api_headers->{'x-ratelimit-remaining'} )
+    {
+        $self->{limits} = {
+            limit     => $api_headers->{'x-ratelimit-limit'},
+            remaining => $api_headers->{'x-ratelimit-remaining'},
+        };
+    } ## end if ( exists $api_headers...)
+
     # Return
     if ( $opts{wantheaders} ) {
       return {
             headers => $api_headers,
-            data    => $api_response,
+            data    => $api_response_data,
         };
     } ## end if ( $opts{wantheaders...})
-  return $api_response;
+  return $api_response_data;
 } ## end sub talk
 
 ## Paginate
@@ -202,7 +218,7 @@ sub paginate {
             max => {
                 type    => SCALAR,
                 default => 200,
-                regex   => qr/^\d+$/,
+                regex   => qr/^\d+$/x,
             },
         },
         allow_extra => 1,
