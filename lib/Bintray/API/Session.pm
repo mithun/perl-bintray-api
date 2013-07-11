@@ -90,9 +90,8 @@ sub new {
         utf8 => 1,
     );
 
-    # Return Object
-    my $self = $class->SUPER::new(%opts);
-  return $self;
+    # Return Object (tiny)
+  return $class->SUPER::new(%opts);
 } ## end sub new
 
 ## Talk

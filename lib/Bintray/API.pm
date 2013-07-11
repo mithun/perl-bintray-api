@@ -31,12 +31,13 @@ use Bintray::API::Session;
 ## ====================
 sub new {
     my ( $class, @args ) = @_;
-    my $self = {};
-    bless $self, $class;
 
-    # Init Session
-    $self->{session} = Bintray::API::Session->new(@args);
-  return $self;
+    # Set Session
+    my %opts;
+    $opts{session} = Bintray::API::Session->new(@args);
+
+    # Return Object (tiny)
+  return $class->SUPER::new(%opts);
 } ## end sub new
 
 ## ====================
