@@ -14,12 +14,8 @@ use Data::Printer;
 
 my $bt = Bintray::API->new(
 
-    # username => 'mithun',
-    # apikey   => $ENV{PERL_BINTRAY_API},
+    username => 'mithun',
+    apikey   => $ENV{PERL_BINTRAY_API},
 );
 
-my $s = $bt->session;
-p $s->talk(
-    path => '/repos/mithun',
-    anon => 1,
-);
+p $bt->search->repos( name => 'test-repo' );
