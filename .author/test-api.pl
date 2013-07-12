@@ -18,4 +18,4 @@ my $bt = Bintray::API->new(
     apikey   => $ENV{PERL_BINTRAY_API},
 );
 
-p $bt->search->repos( name => 'test-repo' );
+p $bt->search->users( name => 'mithun' );

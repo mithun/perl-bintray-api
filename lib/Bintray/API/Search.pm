@@ -81,6 +81,24 @@ sub repos {
     );
 } ## end sub repos
 
+## Search Users
+sub users {
+    my ( $self, @args ) = @_;
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            name => {
+                type => SCALAR,
+            },
+        },
+    );
+
+  return $self->session()->talk(
+        path  => '/search/users',
+        query => [ { name => $opts{name} }, ],
+    );
+} ## end sub users
+
 #######################
 1;
 
