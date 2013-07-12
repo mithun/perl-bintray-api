@@ -14,6 +14,7 @@ use Params::Validate qw(validate_with :types);
 
 use Object::Tiny qw(
   session
+  max_results
 );
 
 #######################
@@ -72,8 +73,9 @@ sub repos {
       or $opts{desc}
       or croak "ERROR: Please provide a name or desc to search for ...";
 
-  return $self->session()->talk(
+  return $self->session()->paginate(
         path  => '/search/repos',
+        max   => $self->max_results(),
         query => [
             ( $opts{name} ? { name => $opts{name} } : () ),
             ( $opts{desc} ? { desc => $opts{desc} } : () ),
@@ -111,8 +113,9 @@ sub packages {
       or $opts{desc}
       or croak "ERROR: Please provide a name or desc to search for ...";
 
-  return $self->session()->talk(
+  return $self->session()->paginate(
         path  => '/search/packages',
+        max   => $self->max_results(),
         query => [
             ( $opts{name} ? { name => $opts{name} } : () ),
             ( $opts{desc}    ? { desc    => $opts{desc} }    : () ),
@@ -134,11 +137,62 @@ sub users {
         },
     );
 
-  return $self->session()->talk(
+  return $self->session()->paginate(
         path  => '/search/users',
+        max   => $self->max_results(),
         query => [ { name => $opts{name} }, ],
     );
 } ## end sub users
+
+## Search Files
+sub files {
+    my ( $self, @args ) = @_;
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            name => {
+                type    => SCALAR,
+                default => '',
+            },
+            sha1 => {
+                type    => SCALAR,
+                regex   => qr/^[\da-z]{40}$/x,
+                default => '',
+            },
+            repo => {
+                type    => SCALAR,
+                default => '',
+            },
+        },
+    );
+
+    # Need either name or description
+    $opts{name}
+      or $opts{sha1}
+      or croak "ERROR: Please provide a name or sha1 to search for ...";
+
+    if ( $opts{sha1} ) {
+      return $self->session()->paginate(
+            path  => '/search/file',
+            max   => $self->max_results(),
+            query => [
+                { sha1 => $opts{sha1} }, ( $opts{repo} ? { repo => $opts{repo} } : () ),
+            ],
+        );
+    } ## end if ( $opts{sha1} )
+
+    if ( $opts{name} ) {
+      return $self->session()->paginate(
+            path  => '/search/file',
+            max   => $self->max_results(),
+            query => [
+                { name => $opts{name} }, ( $opts{repo} ? { repo => $opts{repo} } : () ),
+            ],
+        );
+    } ## end if ( $opts{name} )
+
+  return;
+} ## end sub files
 
 #######################
 1;

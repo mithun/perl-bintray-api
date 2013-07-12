@@ -144,8 +144,10 @@ sub talk {
     # Build Query
     my @query_parts;
     foreach my $_q ( @{ $opts{query} } ) {
-        push @query_parts, sprintf( '%s=%s', each %{$_q} );
-    }
+        foreach my $_k ( keys %{$_q} ) {
+            push @query_parts, sprintf( '%s=%s', $_k, $_q->{$_k} );
+        }
+    } ## end foreach my $_q ( @{ $opts{query...}})
     if (@query_parts) {
         $url .= '?' . join( '&', @query_parts );
     }

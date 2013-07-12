@@ -18,4 +18,4 @@ my $bt = Bintray::API->new(
     apikey   => $ENV{PERL_BINTRAY_API},
 );
 
-p $bt->search->packages( name => 'test-pkg' );
+p $bt->search->files( sha1 => 'a9fcd54b25e7e863d72cd47c08af46e61b74b561' );
