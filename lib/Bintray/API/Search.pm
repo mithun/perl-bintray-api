@@ -81,6 +81,47 @@ sub repos {
     );
 } ## end sub repos
 
+## Search Packages
+sub packages {
+    my ( $self, @args ) = @_;
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            name => {
+                type    => SCALAR,
+                default => '',
+            },
+            desc => {
+                type    => SCALAR,
+                default => '',
+            },
+            repo => {
+                type    => SCALAR,
+                default => '',
+            },
+            subject => {
+                type    => SCALAR,
+                default => '',
+            },
+        },
+    );
+
+    # Need either name or description
+    $opts{name}
+      or $opts{desc}
+      or croak "ERROR: Please provide a name or desc to search for ...";
+
+  return $self->session()->talk(
+        path  => '/search/packages',
+        query => [
+            ( $opts{name} ? { name => $opts{name} } : () ),
+            ( $opts{desc}    ? { desc    => $opts{desc} }    : () ),
+            ( $opts{repo}    ? { repo    => $opts{repo} }    : () ),
+            ( $opts{subject} ? { subject => $opts{subject} } : () ),
+        ],
+    );
+} ## end sub packages
+
 ## Search Users
 sub users {
     my ( $self, @args ) = @_;

@@ -18,4 +18,4 @@ my $bt = Bintray::API->new(
     apikey   => $ENV{PERL_BINTRAY_API},
 );
 
-p $bt->search->users( name => 'mithun' );
+p $bt->search->packages( name => 'test-pkg' );
