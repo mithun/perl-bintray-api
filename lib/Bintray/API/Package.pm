@@ -165,6 +165,110 @@ sub delete_version {
     );
 } ## end sub delete_version
 
+## Get Attributes
+sub get_attributes {
+    my ( $self, @args ) = @_;
+
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            names => {
+                type    => ARRAYREF,
+                default => [],
+            },
+        },
+    );
+
+  return $self->session->talk(
+        path => join( '/',
+            'packages',            $self->repo()->subject()->name(),
+            $self->repo()->name(), $self->name(),
+            'attributes', ), (
+            defined $opts{names}
+            ? (
+                query => [
+                    {
+                        names => join( ',', @{ $opts{names} } ),
+                    },
+                ],
+              )
+            : (),
+        ),
+    );
+} ## end sub get_attributes
+
+# Set Attributes
+sub set_attributes {
+    my ( $self, @args ) = @_;
+
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            attributes => {
+                type => ARRAYREF,
+            },
+            update => {
+                type    => BOOLEAN,
+                default => 0,
+            },
+        },
+    );
+
+    # Create JSON
+    my $json = $self->session()->json()->encode( $opts{attributes} );
+
+    # POST
+  return $self->session()->talk(
+        method => $opts{update} ? 'PATCH' : 'POST',
+        path => join( '/',
+            'packages',            $self->repo()->subject()->name(),
+            $self->repo()->name(), $self->name(),
+            'attributes', ),
+        content => $json,
+    );
+} ## end sub set_attributes
+
+## Update Attributes
+sub update_attributes { return shift->set_attributes( @_, update => 1, ); }
+
+## Add WebHook
+sub set_webhook {
+    my ( $self, @args ) = @_;
+
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            url    => { type => SCALAR },
+            method => {
+                type    => SCALAR,
+                default => 'post',
+                regex   => qr{^(?:post|put|get)$}xi,
+            }
+        },
+    );
+
+  return $self->session->talk(
+        method => 'POST',
+        path   => join( '/',
+            'webhooks',            $self->repo()->subject()->name(),
+            $self->repo()->name(), $self->name(),
+        ),
+        wantheaders => 1,
+    );
+} ## end sub set_webhook
+
+## Delete webhook
+sub delete_webhook {
+    my ($self) = @_;
+  return $self->session->talk(
+        method => 'DELETE',
+        path   => join( '/',
+            'webhooks',            $self->repo()->subject()->name(),
+            $self->repo()->name(), $self->name(),
+        ),
+    );
+} ## end sub delete_webhook
+
 #######################
 1;
 

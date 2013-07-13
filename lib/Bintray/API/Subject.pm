@@ -81,6 +81,14 @@ sub repos {
     );
 } ## end sub repos
 
+## Get Webhooks
+sub get_webhooks {
+    my ($self) = @_;
+  return $self->session->talk(
+        path => join( '/', 'webhooks', $self->name() ),
+    );
+} ## end sub get_webhooks
+
 #######################
 # API HELPERS
 #######################
