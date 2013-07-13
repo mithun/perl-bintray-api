@@ -71,7 +71,23 @@ sub repo {
 # API METHODS
 #######################
 
-# Repositories
+## Info
+sub info {
+    my ($self) = @_;
+  return $self->session->talk(
+        path => join( '/', 'users', $self->name, ),
+    );
+} ## end sub info
+
+## Followers
+sub followers {
+    my ($self) = @_;
+  return $self->session->paginate(
+        path => join( '/', 'users', $self->name, 'followers', ),
+    );
+} ## end sub followers
+
+## Repositories
 sub repos {
     my ($self) = @_;
 
