@@ -18,15 +18,15 @@ use MIME::Base64 qw(encode_base64);
 use Params::Validate qw(validate_with :types);
 
 use Object::Tiny qw(
+  json
+  debug
   apikey
   apiurl
   client
-  debug
-  hascreds
-  json
   limits
-  urlencoder
+  hascreds
   username
+  urlencoder
 );
 
 #######################
@@ -165,10 +165,8 @@ sub talk {
     $url = $self->urlencoder->encode($url);
 
     # Talk
-    my $response
-      = $self->client()
-      ->request( $opts{method}, $url,
-        { $opts{content} ? ( content => $opts{content} ) : () } );
+    my $response = $self->client()->request( uc( $opts{method} ),
+        $url, { $opts{content} ? ( content => $opts{content} ) : () } );
 
     # Check Response
   return unless $response->{success};

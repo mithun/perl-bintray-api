@@ -20,8 +20,9 @@ use Object::Tiny qw(session);
 #######################
 # LOAD DIST MODULES
 #######################
-use Bintray::API::Session;
 use Bintray::API::Search;
+use Bintray::API::Session;
+use Bintray::API::Subject;
 
 #######################
 # PUBLIC METHODS
@@ -50,6 +51,14 @@ sub search {
         @_,
     );
 } ## end sub search
+
+
+sub subject {
+  return Bintray::API::Subject->new(
+        session => shift->session,
+        @_,
+    );
+} ## end sub subject
 
 #######################
 1;
