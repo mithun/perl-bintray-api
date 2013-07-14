@@ -80,7 +80,7 @@ sub package {
 sub info {
     my ( $self, @args ) = @_;
   return $self->session()->talk(
-        path => join( '/', 'repos', $self->subject(), $self->name() ),
+        path => join( '/', 'repos', $self->subject()->name(), $self->name() ),
         anon => 1,
     );
 } ## end sub info

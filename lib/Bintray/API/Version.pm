@@ -62,7 +62,8 @@ sub info {
         path => join( '/',
             'packages',                 $self->package->repo->subject->name,
             $self->package->repo->name, $self->package->name,
-            $self->name, ),
+            'versions',                 $self->name,
+        ),
     );
 } ## end sub info
 
@@ -88,7 +89,8 @@ sub update {
         path   => join( '/',
             'packages',                 $self->package->repo->subject->name,
             $self->package->repo->name, $self->package->name,
-            $self->name, ),
+            'versions',                 $self->name,
+        ),
         content => $json,
     );
 } ## end sub update
@@ -109,10 +111,10 @@ sub get_attributes {
 
   return $self->session->talk(
         path => join( '/',
-            'packages',                 $self->package->repo->subject->name,
-            $self->package->repo->name, $self->package->name,
-            $self->name,                'attributes',
-        ), (
+            'packages',
+            $self->package->repo->subject->name,
+            $self->package->repo->name,
+            $self->package->name, 'versions', $self->name, 'attributes', ), (
             defined $opts{names}
             ? (
                 query => [
@@ -150,10 +152,10 @@ sub set_attributes {
   return $self->session()->talk(
         method => $opts{update} ? 'PATCH' : 'POST',
         path => join( '/',
-            'packages',                 $self->package->repo->subject->name,
-            $self->package->repo->name, $self->package->name,
-            $self->name,                'attributes',
-        ),
+            'packages',
+            $self->package->repo->subject->name,
+            $self->package->repo->name,
+            $self->package->name, 'versions', $self->name, 'attributes', ),
         content => $json,
     );
 } ## end sub set_attributes
@@ -169,7 +171,8 @@ sub test_webhook {
         path   => join( '/',
             'webhooks',                 $self->package->repo->subject->name,
             $self->package->repo->name, $self->package->name,
-            $self->name, ),
+            'versions',                 $self->name,
+        ),
         wantheaders => 1,
     );
 } ## end sub test_webhook

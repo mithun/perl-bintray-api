@@ -22,6 +22,7 @@ use Object::Tiny qw(
   debug
   apikey
   apiurl
+  error
   client
   limits
   hascreds
@@ -89,6 +90,9 @@ sub new {
     $opts{json} = JSON::Any->new(
         utf8 => 1,
     );
+
+    # Init Empty error
+    $opts{error} = '';
 
     # Return Object (tiny)
   return $class->SUPER::new(%opts);
@@ -174,7 +178,17 @@ sub talk {
     );
 
     # Check Response
-  return unless $response->{success};
+    if ( not $response->{success} ) {
+        $self->{error}
+          = "API Call to $opts{path} failed : "
+          . " URL: $response->{url}."
+          . " STATUS: $response->{status}."
+          . " REASON: $response->{reason}."
+          . (
+            ( $response->{status} ne '404' ) ? " CONTENT: $response->{content}." : '' );
+        carp $self->{error} if $self->debug;
+      return;
+    } ## end if ( not $response->{success...})
 
     # Collect Response
     my $api_response_data;
