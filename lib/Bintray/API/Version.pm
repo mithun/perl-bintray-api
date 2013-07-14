@@ -174,6 +174,93 @@ sub test_webhook {
     );
 } ## end sub test_webhook
 
+## Upload
+sub upload {
+    my ( $self, @args ) = @_;
+
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            file => {
+                type => SCALAR,
+            },
+            repo_path => {
+                type => SCALAR,
+            },
+            publish => {
+                type    => BOOLEAN,
+                default => 0,
+            },
+            explode => {
+                type    => BOOLEAN,
+                default => 0,
+            },
+        },
+    );
+
+    # Read File contents
+    my $file_contents;
+    open( my $fh, '<:raw', $opts{file} )
+      or croak "ERROR: Failed to open $opts{file} to read!";
+    my $fs = -s $fh;
+    read( $fh, $file_contents, $fs );
+    close($fh);
+
+    # Cleanup Repo Path
+    $opts{repo_path} =~ s{^\/}{}xi;
+
+    # Upload
+  return $self->session->talk(
+        method => 'PUT',
+        path   => join( '/',
+            'content',                  $self->package->repo->subject->name,
+            $self->package->repo->name, $self->package->name,
+            $self->name,                $opts{repo_path},
+        ),
+        content => $file_contents,
+        params  => [
+
+            # Publish?
+            ( defined $opts{publish} ? { publish => $opts{publish} } : (), ),
+
+            # Explode?
+            ( defined $opts{explode} ? { explode => $opts{explode} } : (), ),
+        ],
+    );
+} ## end sub upload
+
+## Publish files
+sub publish {
+    my ( $self, @args ) = @_;
+
+    my %opts = validate_with(
+        params => [@args],
+        spec   => {
+            discard => {
+                type    => BOOLEAN,
+                default => 0,
+            },
+        },
+    );
+
+  return $self->session->talk(
+        method => 'POST',
+        path   => join( '/',
+            'content',                  $self->package->repo->subject->name,
+            $self->package->repo->name, $self->package->name,
+            $self->name,                'publish',
+        ), (
+            # Check for discard
+            $opts{discard}
+            ? ( content => $self->session->json->encode( { discard => 'true' } ) )
+            : (),
+        ),
+    );
+} ## end sub publish
+
+## Discard files
+sub discard { return shift->publish( @_, discard => 1, ); }
+
 #######################
 1;
 

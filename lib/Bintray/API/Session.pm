@@ -165,8 +165,13 @@ sub talk {
     $url = $self->urlencoder->encode($url);
 
     # Talk
-    my $response = $self->client()->request( uc( $opts{method} ),
-        $url, { $opts{content} ? ( content => $opts{content} ) : () } );
+    my $response = $self->client()->request(
+        uc( $opts{method} ), $url,  # URL
+        {
+            # Check for content
+            $opts{content} ? ( content => $opts{content} ) : (),
+        }
+    );
 
     # Check Response
   return unless $response->{success};
