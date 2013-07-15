@@ -72,7 +72,7 @@ __END__
 
 =head1 NAME
 
-Bintray::API
+Bintray::API - Perl interface to the Bintray API
 
 =head1 SYNOPSIS
 
