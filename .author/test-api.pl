@@ -120,9 +120,10 @@ if ( $opts{r} ) {
         o => [
             $repo->create_package(
                 details => {
-                    name   => 'test-pkg2',
-                    desc   => 'test api',
-                    labels => [qw(foo)]
+                    name     => 'test-pkg2',
+                    desc     => 'test api',
+                    labels   => [qw(foo)],
+                    licenses => [ 'GPL-3.0', 'Artistic-License-2.0', ],
                 }
             )
         ],
@@ -158,8 +159,9 @@ if ( $opts{p} ) {
         o => [
             $pkg->update(
                 details => {
-                    desc   => 'test api',
-                    labels => [qw(foo)]
+                    desc     => 'test api',
+                    labels   => [qw(foo)],
+                    licenses => [ 'GPL-3.0', 'Artistic-License-2.0', ],
                 }
             )
         ],
