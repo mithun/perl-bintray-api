@@ -76,7 +76,39 @@ Bintray::API - Perl interface to the Bintray API
 
 =head1 SYNOPSIS
 
+	# Initialize
+	my $btray = Bintray::API->new(
+	    username => 'user',
+	    apikey   => 'XXXXXXXXXXXXXXXXX',
+	);
+
+	# Repository
+	my $repo = $btray->subject()->repo( name => 'myrepo' );
+	foreach my $pkg ( $repo->packages() ) {
+	    print $pkg->{name} . "\n";
+	}
+
+	# Packages and Versions
+	my $package = $repo->package( name => 'mypackage' );
+	my $version = $package->version( name => '1.0' );
+	my $version_info = $version->info();
+
+	# Upload and Publish a file
+	$version->upload(
+	    file      => '/path/to/local/file',
+	    repo_path => 'myfiles/file',
+	    publish   => 1,
+	);
+
 =head1 DESCRIPTION
+
+L<Bintray|http://bintray.com> is a L<social platform for community-based software distribution|https://bintray.com/docs/bintrayuserguide.html#_what_is_bintray>.
+
+This module provides a Perl wrapper to the L<Bintray REST API|https://bintray.com/docs/api.html>.
+
+=head1 API Methods
+
+This module is structured similar to L<Bintray Entities|https://bintray.com/docs/bintrayuserguide.html#_bintray_entities>.
 
 =head1 DEPENDENCIES
 
