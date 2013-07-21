@@ -44,10 +44,13 @@ sub new {
                 isa  => 'Bintray::API::Session',
             },
             name => {
-                type => SCALAR,
+                type    => SCALAR,
+                default => '',
             },
         },
     );
+    $opts{name} ||= $opts{session}->username()
+      || croak "Subject Name is required";
 
   return $class->SUPER::new(%opts);
 } ## end sub new
