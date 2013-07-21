@@ -8,6 +8,11 @@ use warnings FATAL => 'all';
 use Carp qw(croak carp);
 
 #######################
+# VERSION
+#######################
+our $VERSION = '0.01';
+
+#######################
 # LOAD CPAN MODULES
 #######################
 use Params::Validate qw(validate_with :types);
