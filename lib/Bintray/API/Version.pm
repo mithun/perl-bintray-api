@@ -269,6 +269,39 @@ sub publish {
 ## Discard files
 sub discard { return shift->publish( @_, discard => 1, ); }
 
+## Sign a Version
+sub sign {
+    my ( $self, @args ) = @_;
+    my %opts = validate_with(
+        params => [@_],
+        spec   => {
+            passphrase => {
+                type    => SCALAR,
+                default => '',
+            },
+        },
+    );
+
+  return $self->session()->talk(
+        method => 'POST',
+        path   => join( '/',
+            'gpg',                      $self->package->repo->subject->name,
+            $self->package->repo->name, $self->package->name,
+            'versions',                 $self->name,
+        ), (
+            $opts{passphrase}
+            ? (
+                query => [
+                    {
+                        passphrase => $opts{passphrase},
+                    },
+                ],
+              )
+            : (),
+        ),
+    );
+} ## end sub sign
+
 #######################
 1;
 
