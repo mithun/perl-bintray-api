@@ -1,80 +1,14 @@
-package Bintray::API;
-
-#######################
-# LOAD MODULES
-#######################
-use strict;
-use warnings FATAL => 'all';
-use Carp qw(croak carp);
-
-#######################
-# VERSION
-#######################
-our $VERSION = '0.01';
-
-#######################
-# LOAD CPAN MODULES
-#######################
-use Object::Tiny qw(session);
-
-#######################
-# LOAD DIST MODULES
-#######################
-use Bintray::API::Search;
-use Bintray::API::Session;
-use Bintray::API::Subject;
-
-#######################
-# PUBLIC METHODS
-#######################
-
-## ====================
-## CONSTRUCTOR
-## ====================
-sub new {
-    my ( $class, @args ) = @_;
-
-    # Set Session
-    my %opts;
-    $opts{session} = Bintray::API::Session->new(@args);
-
-    # Return Object (tiny)
-  return $class->SUPER::new(%opts);
-} ## end sub new
-
-## ====================
-## Bintray OBJECTS
-## ====================
-sub search {
-  return Bintray::API::Search->new(
-        session => shift->session,
-        @_,
-    );
-} ## end sub search
 
 
-sub subject {
-  return Bintray::API::Subject->new(
-        session => shift->session,
-        @_,
-    );
-} ## end sub subject
 
-#######################
-1;
 
-__END__
 
-#######################
-# POD SECTION
-#######################
-=pod
 
-=head1 NAME
+# NAME
 
 Bintray::API - Perl interface to the Bintray API
 
-=head1 SYNOPSIS
+# SYNOPSIS
 
 	# Initialize
 	my $btray = Bintray::API->new(
@@ -100,23 +34,19 @@ Bintray::API - Perl interface to the Bintray API
 	    publish   => 1,
 	);
 
-=head1 DESCRIPTION
+# DESCRIPTION
 
-L<Bintray|http://bintray.com> is a L<social platform for
-community-based software
-distribution|https://bintray.com/docs/bintrayuserguide.html#_what_is_bintray>.
+[Bintray](http://bintray.com) is a [social platform for community-based software distribution](https://bintray.com/docs/bintrayuserguide.html\#\_what\_is\_bintray).
 
-This module provides a Perl wrapper to the L<Bintray REST
-API|https://bintray.com/docs/api.html>.
+This module provides a Perl wrapper to the [Bintray REST API](https://bintray.com/docs/api.html).
 
-=head1 API Methods
+# API Methods
 
-This distribution is structured similar to L<Bintray
-Entities|https://bintray.com/docs/bintrayuserguide.html#_bintray_entities>.
+This distribution is structured similar to [Bintray Entities](https://bintray.com/docs/bintrayuserguide.html\#\_bintray\_entities).
 
-=head2 SUBJECT
+## SUBJECT
 
-A I<subject> is either a user or an organization
+A _subject_ is either a user or an organization
 
 	# Initialize a subject
 	my $subject = $btray->subject(
@@ -133,7 +63,7 @@ A I<subject> is either a user or an organization
 	my $repos      = $subject->repos();         # Get user repositories
 	my @repo_names = $subject->repo_names();    # Shortcut to list repo names
 
-=head2 REPOSITORY
+## REPOSITORY
 
 	# Initialize a Repo
 	my $repo = $subject->repo( name => 'myrepo' );
@@ -159,7 +89,7 @@ A I<subject> is either a user or an organization
 	# Delete Package
 	$repo->delete_package( name => 'MyPackage' );
 
-=head2 PACKAGE
+## PACKAGE
 
 	## Initialize Package
 	my $package = $repo->package( name => 'MyPackage' );
@@ -197,7 +127,7 @@ A I<subject> is either a user or an organization
 	$package->set_webhook( url => 'http://....' );
 	$package->delete_webhook();
 
-=head2 VERSIONS
+## VERSIONS
 
 	## Initialize Versions
 	my $version = $package->version( name => '1.0' );
@@ -237,7 +167,7 @@ A I<subject> is either a user or an organization
 	$version->set_attributes( attributes => [...] );
 	$version->update_attributes( attributes => [...] );
 
-=head2 SEARCH
+## SEARCH
 
 	## Init Search object
 	my $search = $btray->search();
@@ -266,21 +196,19 @@ A I<subject> is either a user or an organization
 	# Search Users or Organizations
 	@results = $search->users( name => '...' );
 
-=head1 BUGS AND LIMITATIONS
+# BUGS AND LIMITATIONS
 
 Please report any bugs or feature requests to
-C<bug-bintray-api@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=Bintray-API>
+`bug-bintray-api@rt.cpan.org`, or through the web interface at
+[http://rt.cpan.org/Public/Dist/Display.html?Name=Bintray-API](http://rt.cpan.org/Public/Dist/Display.html?Name=Bintray-API)
 
-=head1 AUTHOR
+# AUTHOR
 
-Mithun Ayachit C<mithun@cpan.org>
+Mithun Ayachit `mithun@cpan.org`
 
-=head1 LICENSE AND COPYRIGHT
+# LICENSE AND COPYRIGHT
 
 Copyright (c) 2013, Mithun Ayachit. All rights reserved.
 
 This module is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself. See L<perlartistic>.
-
-=cut
+under the same terms as Perl itself. See [perlartistic](http://search.cpan.org/perldoc?perlartistic).
