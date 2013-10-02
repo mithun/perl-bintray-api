@@ -2,4 +2,10 @@
 % Mithun Ayachit
 %
 
+# 0.02
+
+- Fixed dependencies
+
 # 0.01
+
+- Initial Release

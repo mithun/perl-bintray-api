@@ -49,4 +49,5 @@ resources:
   homepage: https://github.com/mithun/perl-bintray-api
   license: http://dev.perl.org/licenses/
   repository: git://github.com/mithun/perl-bintray-api.git
-version: 0.01
+version: 0.02
+

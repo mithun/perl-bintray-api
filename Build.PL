@@ -35,17 +35,20 @@ my $builder = Module::Build->new(
     # Prereqs
     build_requires => {
         'Test::More' => 0,
-        'Test::Deep' => 0,
-        'Test::Pod'  => '1.00',
-        'version'    => 0,
     },
     requires => {
-
+        'Encode'           => 0,
+        'HTTP::Tiny'       => 0,
+        'JSON::Any'        => 0,
+        'MIME::Base64'     => 0,
+        'Object::Tiny'     => 0,
+        'Params::Validate' => 0,
+        'URI::Encode'      => '0.08',
     },
 
     # Recommendations
     recommends => {
-
+        'JSON::XS' => 0,
     },
 
     # Meta
