@@ -5,10 +5,14 @@ WriteMakefile
   'NAME' => 'Bintray::API',
   'VERSION_FROM' => 'lib/Bintray/API.pm',
   'PREREQ_PM' => {
-                   'Test::Deep' => 0,
+                   'Encode' => 0,
+                   'HTTP::Tiny' => 0,
+                   'JSON::Any' => 0,
+                   'MIME::Base64' => 0,
+                   'Object::Tiny' => 0,
+                   'Params::Validate' => 0,
                    'Test::More' => 0,
-                   'Test::Pod' => '1.00',
-                   'version' => 0
+                   'URI::Encode' => '0.08'
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [],
