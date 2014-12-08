@@ -4,6 +4,10 @@ author:
 title: 'Version History for Bintray-API'
 ...
 
+# 0.3.0
+
+-   Bump version to allow cpan reindex
+
 # 0.2.1
 
 -   No functional changes. Use semver and github-issues
