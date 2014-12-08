@@ -105,10 +105,14 @@ sub packages {
     );
 
   return $self->session()->talk(
-        path =>
-          join( '/', 'repos', $self->subject()->name(), $self->name(), 'packages' ),
-        anon => 1,
-        ( $opts{prefix} ? ( query => [ { start_name => $opts{prefix} } ] ) : (), ),
+        path => join( '/',
+            'repos', $self->subject()->name(),
+            $self->name(), 'packages' ),
+        anon => 1, (
+            $opts{prefix}
+            ? ( query => [ { start_name => $opts{prefix} } ] )
+            : (),
+        ),
     );
 } ## end sub packages
 
@@ -130,8 +134,9 @@ sub create_package {
 
     # POST
   return $self->session()->talk(
-        method  => 'POST',
-        path    => join( '/', 'packages', $self->subject()->name(), $self->name(), ),
+        method => 'POST',
+        path =>
+          join( '/', 'packages', $self->subject()->name(), $self->name(), ),
         content => $json,
     );
 } ## end sub create_package
@@ -152,8 +157,9 @@ sub delete_package {
   return $self->session()->talk(
         method => 'DELETE',
         path   => join( '/',
-            'packages', $self->subject()->name(),
-            $self->name(), $opts{name}, ),
+            'packages',    $self->subject()->name(),
+            $self->name(), $opts{name},
+        ),
     );
 } ## end sub delete_package
 
@@ -161,7 +167,8 @@ sub delete_package {
 sub get_webhooks {
     my ($self) = @_;
   return $self->session->talk(
-        path => join( '/', 'webhooks', $self->subject()->name(), $self->name() ),
+        path =>
+          join( '/', 'webhooks', $self->subject()->name(), $self->name() ),
     );
 } ## end sub get_webhooks
 

@@ -181,7 +181,8 @@ sub files {
             path  => '/search/file',
             max   => $self->max_results(),
             query => [
-                { sha1 => $opts{sha1} }, ( $opts{repo} ? { repo => $opts{repo} } : () ),
+                { sha1 => $opts{sha1} },
+                ( $opts{repo} ? { repo => $opts{repo} } : () ),
             ],
         );
     } ## end if ( $opts{sha1} )
@@ -191,7 +192,8 @@ sub files {
             path  => '/search/file',
             max   => $self->max_results(),
             query => [
-                { name => $opts{name} }, ( $opts{repo} ? { repo => $opts{repo} } : () ),
+                { name => $opts{name} },
+                ( $opts{repo} ? { repo => $opts{repo} } : () ),
             ],
         );
     } ## end if ( $opts{name} )

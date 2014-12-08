@@ -79,8 +79,11 @@ sub new {
             (
                 $opts{hascreds}
                 ? (
-                    'Authorization' => sprintf( '%s %s',
-                        'Basic', encode_base64( join( ':', $opts{username}, $opts{apikey} ), '' ),
+                    'Authorization' => sprintf(
+                        '%s %s', 'Basic',
+                        encode_base64(
+                            join( ':', $opts{username}, $opts{apikey} ), ''
+                        ),
                     ),
                   )
                 : ()
@@ -189,8 +192,9 @@ sub talk {
           . " URL: $response->{url}."
           . " STATUS: $response->{status}."
           . " REASON: $response->{reason}."
-          . (
-            ( $response->{status} ne '404' ) ? " CONTENT: $response->{content}." : '' );
+          . ( ( $response->{status} ne '404' )
+            ? " CONTENT: $response->{content}."
+            : '' );
         carp $self->{error} if $self->debug;
       return;
     } ## end if ( not $response->{success...})
@@ -257,7 +261,7 @@ sub paginate {
         my $response = $self->talk(
             %opts,
             wantheaders => 1,
-            query       => [ { start_pos => $start_pos }, @{ $opts{query} }, ],
+            query => [ { start_pos => $start_pos }, @{ $opts{query} }, ],
         );
       last if not defined $response;
 

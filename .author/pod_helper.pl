@@ -39,7 +39,7 @@ $version->upload(
 my $subject = $btray->subject(
 
     # Provide an optional _name_
-    #	- defaults to the current username
+    #   - defaults to the current username
     name => 'my_company',
 );
 

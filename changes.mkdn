@@ -1,6 +1,12 @@
-% Version History for Bintray-API
-% Mithun Ayachit
-%
+---
+author:
+- Mithun Ayachit
+title: 'Version History for Bintray-API'
+...
+
+# 0.2.1
+
+-   No functional changes. Use semver and github-issues
 
 # 0.02
 

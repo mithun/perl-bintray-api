@@ -4,7 +4,7 @@
       "Mithun Ayachit <mithun@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4007, CPAN::Meta::Converter version 2.132510",
+   "generated_by" : "Module::Build version 0.421",
    "keywords" : [],
    "license" : [
       "perl_5"
@@ -29,7 +29,7 @@
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.40"
+            "Module::Build" : "0.42"
          }
       },
       "runtime" : {
@@ -50,7 +50,7 @@
    "provides" : {
       "Bintray::API" : {
          "file" : "lib/Bintray/API.pm",
-         "version" : "0.02"
+         "version" : "v0.2.1"
       },
       "Bintray::API::Package" : {
          "file" : "lib/Bintray/API/Package.pm",
@@ -80,7 +80,7 @@
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=Bintray-API"
+         "web" : "https://github.com/mithun/perl-bintray-api/issues"
       },
       "homepage" : "https://github.com/mithun/perl-bintray-api",
       "license" : [
@@ -90,5 +90,5 @@
          "url" : "git://github.com/mithun/perl-bintray-api.git"
       }
    },
-   "version" : "0.02"
+   "version" : "v0.2.1"
 }

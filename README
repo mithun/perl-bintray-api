@@ -1,10 +1,14 @@
+
+
 NAME
-====
+
 
 Bintray::API - Perl interface to the Bintray API
 
+
+
 SYNOPSIS
-========
+
 
     # Initialize
     my $btray = Bintray::API->new(
@@ -30,22 +34,26 @@ SYNOPSIS
         publish   => 1,
     );
 
+
+
 DESCRIPTION
-===========
+
 
 Bintray is a social platform for community-based software distribution.
 
 This module provides a Perl wrapper to the Bintray REST API.
 
-API Methods
-===========
+
+
+API METHODS
+
 
 This distribution is structured similar to Bintray Entities.
 
-SUBJECT
--------
 
-A subject is either a user or an organization
+SUBJECT
+
+A _subject_ is either a user or an organization
 
     # Initialize a subject
     my $subject = $btray->subject(
@@ -62,8 +70,8 @@ A subject is either a user or an organization
     my $repos      = $subject->repos();         # Get user repositories
     my @repo_names = $subject->repo_names();    # Shortcut to list repo names
 
+
 REPOSITORY
-----------
 
     # Initialize a Repo
     my $repo = $subject->repo( name => 'myrepo' );
@@ -89,8 +97,8 @@ REPOSITORY
     # Delete Package
     $repo->delete_package( name => 'MyPackage' );
 
+
 PACKAGE
--------
 
     ## Initialize Package
     my $package = $repo->package( name => 'MyPackage' );
@@ -128,8 +136,8 @@ PACKAGE
     $package->set_webhook( url => 'http://....' );
     $package->delete_webhook();
 
+
 VERSIONS
---------
 
     ## Initialize Versions
     my $version = $package->version( name => '1.0' );
@@ -169,8 +177,8 @@ VERSIONS
     $version->set_attributes( attributes => [...] );
     $version->update_attributes( attributes => [...] );
 
+
 SEARCH
-------
 
     ## Init Search object
     my $search = $btray->search();
@@ -199,22 +207,27 @@ SEARCH
     # Search Users or Organizations
     @results = $search->users( name => '...' );
 
-BUGS AND LIMITATIONS
-====================
 
-Please report any bugs or feature requests to
-bug-bintray-api@rt.cpan.org, or through the web interface at
-http://rt.cpan.org/Public/Dist/Display.html?Name=Bintray-API
+
+BUGS AND LIMITATIONS
+
+
+Please report any bugs or feature requests at
+https://github.com/mithun/perl-bintray-api/issues
+
+
 
 AUTHOR
-======
+
 
 Mithun Ayachit mithun@cpan.org
 
-LICENSE AND COPYRIGHT
-=====================
 
-Copyright (c) 2013, Mithun Ayachit. All rights reserved.
+
+LICENSE AND COPYRIGHT
+
+
+Copyright (c) 2014, Mithun Ayachit. All rights reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself. See perlartistic.

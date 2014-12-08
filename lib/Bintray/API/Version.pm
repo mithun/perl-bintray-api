@@ -116,10 +116,10 @@ sub get_attributes {
 
   return $self->session->talk(
         path => join( '/',
-            'packages',
-            $self->package->repo->subject->name,
-            $self->package->repo->name,
-            $self->package->name, 'versions', $self->name, 'attributes', ), (
+            'packages',                 $self->package->repo->subject->name,
+            $self->package->repo->name, $self->package->name,
+            'versions',                 $self->name,
+            'attributes', ), (
             defined $opts{names}
             ? (
                 query => [
@@ -157,10 +157,10 @@ sub set_attributes {
   return $self->session()->talk(
         method => $opts{update} ? 'PATCH' : 'POST',
         path => join( '/',
-            'packages',
-            $self->package->repo->subject->name,
-            $self->package->repo->name,
-            $self->package->name, 'versions', $self->name, 'attributes', ),
+            'packages',                 $self->package->repo->subject->name,
+            $self->package->repo->name, $self->package->name,
+            'versions',                 $self->name,
+            'attributes', ),
         content => $json,
     );
 } ## end sub set_attributes
@@ -260,7 +260,8 @@ sub publish {
         ), (
             # Check for discard
             $opts{discard}
-            ? ( content => $self->session->json->encode( { discard => 'true' } ) )
+            ? ( content =>
+                  $self->session->json->encode( { discard => 'true' } ) )
             : (),
         ),
     );

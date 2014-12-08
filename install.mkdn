@@ -1,6 +1,8 @@
-% Installing Bintray-API
-% Mithun Ayachit
-%
+---
+author:
+- Mithun Ayachit
+title: 'Installing Bintray-API'
+...
 
 # Distribution page
 
@@ -33,4 +35,4 @@ following commands
     make test
     make install
 
-* * * * *
+------------------------------------------------------------------------
