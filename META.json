@@ -50,7 +50,7 @@
    "provides" : {
       "Bintray::API" : {
          "file" : "lib/Bintray/API.pm",
-         "version" : "v0.3.0"
+         "version" : "v1.0.1"
       },
       "Bintray::API::Package" : {
          "file" : "lib/Bintray/API/Package.pm",
@@ -90,5 +90,5 @@
          "url" : "git://github.com/mithun/perl-bintray-api.git"
       }
    },
-   "version" : "v0.3.0"
+   "version" : "v1.0.1"
 }
