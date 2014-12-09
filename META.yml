@@ -22,25 +22,25 @@ no_index:
 provides:
   Bintray::API:
     file: lib/Bintray/API.pm
-    version: v1.0.1
+    version: v1.0.2
   Bintray::API::Package:
     file: lib/Bintray/API/Package.pm
-    version: '0.02'
+    version: v1.0.2
   Bintray::API::Repo:
     file: lib/Bintray/API/Repo.pm
-    version: '0.02'
+    version: v1.0.2
   Bintray::API::Search:
     file: lib/Bintray/API/Search.pm
-    version: '0.02'
+    version: v1.0.2
   Bintray::API::Session:
     file: lib/Bintray/API/Session.pm
-    version: '0.02'
+    version: v1.0.2
   Bintray::API::Subject:
     file: lib/Bintray/API/Subject.pm
-    version: '0.02'
+    version: v1.0.2
   Bintray::API::Version:
     file: lib/Bintray/API/Version.pm
-    version: '0.02'
+    version: v1.0.2
 recommends:
   JSON::XS: '0'
 requires:
@@ -56,4 +56,4 @@ resources:
   homepage: https://github.com/mithun/perl-bintray-api
   license: http://dev.perl.org/licenses/
   repository: git://github.com/mithun/perl-bintray-api.git
-version: v1.0.1
+version: v1.0.2
